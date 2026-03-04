@@ -1,150 +1,306 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>README — WP E-Commerce Automation Stack</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:       #030712;
-  --surface:  #0a0f1e;
-  --panel:    #0d1424;
-  --border:   rgba(0,255,180,0.12);
-  --border2:  rgba(0,255,180,0.25);
-  --green:    #00ffb4;
-  --cyan:     #00d4ff;
-  --red:      #ff3e6c;
-  --gold:     #ffd166;
-  --dim:      rgba(0,255,180,0.5);
-  --muted:    rgba(200,220,255,0.35);
-  --text:     rgba(200,220,255,0.85);
-  --font-mono: 'Share Tech Mono', monospace;
-  --font-ar:   'Cairo', sans-serif;
-  --font-head: 'Orbitron', sans-serif;
-}
+# 🛒 WordPress E-Commerce Automation Stack
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+> دليل احترافي شامل لبناء متجر WordPress e-commerce ثنائي اللغة  
+> **عربي / إنجليزي** · مصر 🇪🇬 · الخليج 🇸🇦 · بعقلية الـ CTO + قوة الـ Automation
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-ar);
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+---
 
-/* ── SCANLINES ── */
-body::after {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none; z-index: 1000;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0,255,180,0.015) 0px, rgba(0,255,180,0.015) 1px,
-    transparent 1px, transparent 3px
-  );
-  animation: scan 8s linear infinite;
-}
-@keyframes scan {
-  0%   { background-position: 0 0; }
-  100% { background-position: 0 100vh; }
-}
+![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white)
+![WooCommerce](https://img.shields.io/badge/WooCommerce-96588A?style=for-the-badge&logo=woocommerce&logoColor=white)
+![ERPNext](https://img.shields.io/badge/ERPNext-0089FF?style=for-the-badge&logo=frappé&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
 
-/* ── GRID BG ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(rgba(0,255,180,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,180,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
+---
 
-/* ════════════════════════════════
-   TOP BAR
-════════════════════════════════ */
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  height: 44px;
-  background: rgba(3,7,18,0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 32px; gap: 24px;
-}
+## 📋 جدول المحتويات
 
-.topbar-dots { display: flex; gap: 7px; }
-.td { width: 11px; height: 11px; border-radius: 50%; }
-.td1 { background: var(--red); box-shadow: 0 0 8px var(--red); }
-.td2 { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-.td3 { background: var(--green); box-shadow: 0 0 8px var(--green); }
+- [نظرة عامة](#-نظرة-عامة)
+- [الـ Stack الأساسي](#-الـ-stack-الأساسي)
+- [Automation Pipeline](#-automation-pipeline)
+- [البلاجنز المجانية](#-البلاجنز-المجانية)
+- [البلاجنز المدفوعة](#-البلاجنز-المدفوعة)
+- [بوابات الدفع](#-بوابات-الدفع)
+- [دعم العربية و RTL](#-دعم-العربية-و-rtl)
+- [تفصيل التكلفة](#-تفصيل-التكلفة)
+- [Quick Start](#-quick-start)
 
-.topbar-title {
-  font-family: var(--font-mono);
-  font-size: 12px; color: var(--green); letter-spacing: 2px;
-  flex: 1; text-align: center;
-}
+---
 
-.topbar-status {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono); font-size: 11px; color: var(--green);
-}
-.pulse-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px var(--green);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.4; transform: scale(0.7); }
-}
+## 🎯 نظرة عامة
 
-/* ════════════════════════════════
-   MAIN WRAPPER
-════════════════════════════════ */
-.wrapper {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 72px 24px 80px;
-}
+```
+PROJECT    : WordPress E-Commerce (AR/EN)
+MARKETS    : Egypt 🇪🇬 · Saudi Arabia 🇸🇦 · Gulf 🌍
+STACK      : WordPress + WooCommerce + ERPNext
+LANGUAGES  : Arabic (RTL) + English (LTR)
+AUTOMATION : n8n + Make + WooCommerce REST API
+MINDSET    : CTO-Grade Architecture
+```
 
-/* ════════════════════════════════
-   HERO HEADER
-════════════════════════════════ */
-.hero-header {
-  text-align: center;
-  padding: 60px 0 40px;
-  position: relative;
-}
+---
 
-.glitch-title {
-  font-family: var(--font-head);
-  font-size: clamp(28px, 6vw, 58px);
-  font-weight: 900;
-  color: var(--green);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  position: relative;
-  display: inline-block;
-  animation: titleIn 1s ease both;
-  text-shadow:
-    0 0 20px rgba(0,255,180,0.5),
-    0 0 60px rgba(0,255,180,0.2);
-}
+## 🏗️ الـ Stack الأساسي
 
-.glitch-title::before,
-.glitch-title::after {
-  content: attr(data-text);
-  position: absolute; inset: 0;
-  font-family: var(--font-head);
-}
-.glitch-title::before {
-  color: var(--red); clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  animation: glitch1 4s infinite;
-}
-.glitch-title::after {
+| العنصر | الأداة | السبب |
+|--------|--------|-------|
+| 🎨 Theme | **Flatsome** | سرعة + دعم RTL نيتف + UX Builder |
+| ⚡ Page Builder | **Elementor Pro** | الأقوى في السوق العربي |
+| 🛒 E-Commerce | **WooCommerce** | مجاني + ecosystem ضخم |
+| 🌐 Multilingual | **WPML** | أقوى حل للعربية/الإنجليزية |
+| 🚀 Performance | **WP Rocket** | Cache + Core Web Vitals |
+| ☁️ CDN | **Cloudflare** | مجاني + DDoS Protection |
+| 🖥️ Hosting | **Cloudways (DO)** | أفضل أداء لـ WooCommerce |
+
+---
+
+## ⚙️ Automation Pipeline
+
+```
+🛒 WooCommerce  →  ⚙️ n8n/Make  →  📊 ERPNext  →  📦 Inventory
+                                                  ↓
+                                          💰 Accounting
+                                                  ↓
+                                          📧 Email/SMS Notify
+                                                  ↓
+                                          📈 Analytics Dashboard
+```
+
+### Flow Code
+
+```javascript
+// WooCommerce → ERPNext Automation Flow
+const flow = {
+  trigger  : 'woocommerce.order.created',
+  steps    : [
+    'validate_order',
+    'sync_erpnext_salesorder',
+    'deduct_inventory',
+    'create_accounting_entry',
+    'send_ar_en_confirmation',
+  ],
+  payment  : 'paymob | moyasar | tap',
+  currency : 'EGP | SAR | AED | USD',
+};
+
+// ▶ Flow registered. Listening for events...
+```
+
+---
+
+## 🆓 البلاجنز المجانية
+
+| # | Plugin | الوظيفة | الحالة |
+|---|--------|---------|--------|
+| 01 | **WooCommerce** | المتجر الأساسي — المنتجات، الطلبات، السلة | ✅ Core |
+| 02 | **Polylang** | ثنائية اللغة بديل مجاني لـ WPML | ✅ Free |
+| 03 | **Yoast SEO** | سيو متكامل مع Schema + Open Graph | ✅ Free |
+| 04 | **Wordfence Security** | جدار حماية + Malware Scanner | ✅ Free |
+| 05 | **Dokan Multivendor** | Multi-Vendor Marketplace كامل | ✅ Free |
+| 06 | **MailPoet** | Email Marketing + أتمتة الحملات | ✅ Free |
+| 07 | **WooCommerce Arabic** | دعم RTL كامل للمتجر | ✅ Free |
+| 08 | **RTL Tester** | اختبار الاتجاهين AR/EN | ✅ Free |
+
+---
+
+## 💳 البلاجنز المدفوعة
+
+| # | Plugin | الوظيفة | السعر |
+|---|--------|---------|-------|
+| 01 | **Flatsome Theme** | قالب متجر احترافي + UX Builder | `$59 once` |
+| 02 | **Elementor Pro** | Page Builder + Popup + Theme Builder | `$59/yr` |
+| 03 | **WPML** | ترجمة كاملة AR/EN مع WooCommerce | `$99/yr` |
+| 04 | **WP Rocket** | أسرع Cache Plugin + Lazy Load | `$59/yr` |
+| 05 | **ShortPixel** | ضغط صور تلقائي + WebP | `$4.99/mo` |
+| 06 | **UpdraftPlus Pro** | نسخ احتياطي Google Drive + S3 | `$70/yr` |
+| 07 | **Currency Switcher Pro** | EGP / SAR / AED تلقائي حسب الموقع | `$29/yr` |
+
+---
+
+## 💰 بوابات الدفع
+
+### 🇪🇬 السوق المصري
+
+| البوابة | المميزات | التكلفة |
+|---------|---------|---------|
+| **Paymob (Accept)** | بطاقات + محافظ + فاتورة · Plugin جاهز | 🟢 Free Setup |
+| **Fawry** | الأكثر انتشاراً · دفع في المحلات + أونلاين | 🟢 Free Setup |
+| **Kashier** | واجهة عربية ممتازة + دعم 3DS | 🟡 Commission |
+| **PayTabs** | مصر + الخليج في بوابة واحدة | 🟡 Commission |
+
+### 🇸🇦 السوق الخليجي
+
+| البوابة | المميزات | التكلفة |
+|---------|---------|---------|
+| **Moyasar** | الأفضل في السعودية · Mada + Visa + STC | 🟢 Free Setup |
+| **Tap Payments** | يغطي كل الخليج · STC Pay + Mada | 🟢 Free Setup |
+| **HyperPay** | Enterprise Level · مشاريع الشركات الكبيرة | 🟡 Enterprise |
+| **Stripe (via agent)** | بطاقات دولية عبر وسيط مصري | 🟡 2.9% + 30¢ |
+
+---
+
+## 🌐 دعم العربية و RTL
+
+- [x] **خطوط احترافية** — استخدم `Cairo` أو `Tajawal` من Google Fonts
+- [x] **WPML + WooCommerce Multilingual** — ترجمة المنتجات، الكاتيجوريز، والإيميلات
+- [x] **RTL Tester Plugin** — اختبر Cart + Checkout + My Account بالكامل
+- [x] **Currency Switcher Pro** — EGP/SAR/AED تلقائي حسب موقع الزائر
+- [x] **Email Customizer** — قوالب إيميل عربية/إنجليزية لكل حالات الطلب
+- [x] **Native RTL Theme** — Flatsome أو Astra Pro يدعمان RTL بشكل نيتف
+
+---
+
+## 📊 تفصيل التكلفة
+
+```bash
+#!/bin/bash
+# Stack Cost Calculator
+
+# ── Hosting ──────────────────────────
+hosting_monthly=14          # Cloudways (DigitalOcean)
+cdn="Cloudflare"            # FREE
+
+# ── One-Time ─────────────────────────
+flatsome=59                 # Theme (مرة واحدة)
+
+# ── Annual Plugins ────────────────────
+elementor_pro=59
+wpml=99
+wp_rocket=59
+updraftplus=70
+currency_switcher=29
+# Total annual plugins: $316/yr
+
+# ── Monthly ───────────────────────────
+shortpixel=4.99             # $59.88/yr
+
+# ── Payment Gateways ──────────────────
+paymob="FREE SETUP"
+moyasar="FREE SETUP"
+tap="FREE SETUP"
+
+# ─────────────────────────────────────
+echo "YEAR 1 TOTAL  : ~$504"
+echo "YEAR 2+ / yr  : ~$445"
+echo "✓ Cost-efficient for production-grade bilingual e-commerce"
+```
+
+### ملخص التكلفة
+
+| البند | السنة الأولى | السنة الثانية+ |
+|-------|-------------|---------------|
+| Hosting (Cloudways) | $168/yr | $168/yr |
+| Flatsome Theme | $59 (مرة) | — |
+| Plugins السنوية | $217/yr | $217/yr |
+| ShortPixel | $60/yr | $60/yr |
+| **الإجمالي** | **~$504** | **~$445/yr** |
+
+> 💡 **بوابات الدفع مجانية Setup** — Paymob · Moyasar · Tap
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Step 1: Provision server on Cloudways (DigitalOcean)
+$ cloudways server:create --app wordpress --size 2GB
+  ✓ Server provisioned
+
+# Step 2: Install WooCommerce + Flatsome
+$ wp plugin install woocommerce --activate
+  ✓ WooCommerce installed & activated
+
+$ wp theme install flatsome --activate
+  ✓ Flatsome theme active
+
+# Step 3: Enable RTL + Arabic
+$ wp language core install ar --activate
+  ✓ Arabic language enabled (RTL)
+
+# Step 4: Connect ERPNext via REST API
+$ curl -X POST https://erp.yourdomain.com/api/resource/Sales%20Order \
+       -H "Authorization: token api_key:api_secret" \
+       -d '{"doctype":"Sales Order","customer":"WC-001"}'
+  ✓ ERPNext sync established
+
+# ▶ All systems GO. Store is live 🚀
+```
+
+---
+
+## 🧠 CTO Notes
+
+> بما إنك **ERPNext Developer** — ده ميزة تنافسية ضخمة.  
+> ربط WooCommerce بـ ERPNext هيخليك تتحكم في المخزون، المحاسبة، والطلبات من مكان واحد.
+
+```
+YOUR COMPETITIVE EDGE:
+  ✅ Full Stack      → Custom Development بدون قيود
+  ✅ ERPNext         → Business Automation كامل
+  ✅ Automation      → Zero Manual Operations
+  ✅ CTO Mindset     → Scalable Architecture من اليوم الأول
+```
+
+---
+
+## 📁 Project Structure
+
+```
+wp-ecommerce-stack/
+├── plugins/
+│   ├── free/
+│   │   ├── woocommerce/
+│   │   ├── yoast-seo/
+│   │   ├── wordfence/
+│   │   └── dokan/
+│   └── paid/
+│       ├── wpml/
+│       ├── elementor-pro/
+│       ├── wp-rocket/
+│       └── shortpixel/
+├── automation/
+│   ├── flows/
+│   │   ├── order-flow.js
+│   │   ├── inventory-sync.js
+│   │   └── accounting-entry.js
+│   └── config/
+│       └── erpnext-connector.json
+├── payments/
+│   ├── paymob/
+│   ├── moyasar/
+│   └── tap/
+└── README.md
+```
+
+---
+
+## 🔗 Resources
+
+- [WooCommerce Docs](https://woocommerce.com/documentation/)
+- [WPML for WooCommerce](https://wpml.org/documentation/related-projects/woocommerce-multilingual/)
+- [Paymob WooCommerce Plugin](https://accept.paymob.com)
+- [Moyasar WooCommerce](https://moyasar.com/plugins/woocommerce/)
+- [ERPNext REST API](https://frappeframework.com/docs/user/en/api)
+- [n8n Automation](https://n8n.io)
+- [Cloudways Hosting](https://www.cloudways.com)
+
+---
+
+<div align="center">
+
+**WP · AUTOMATION · STACK**
+
+*Crafted with CTO Mindset · Full Stack Developer · ERPNext Expert*
+
+Egypt 🇪🇬 · Saudi Arabia 🇸🇦 · Gulf Region 🌍
+
+`WordPress` · `WooCommerce` · `ERPNext` · `n8n` · `Cloudflare`
+
+---
+
+README v2.0 · 2025 · MIT License
+
+</div>
   color: var(--cyan); clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
   animation: glitch2 4s infinite;
 }
