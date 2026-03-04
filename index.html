@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordPress E-Commerce | دليل الاحتراف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f0e8;
+    --accent: #e63946;
+    --gold: #f4a261;
+    --teal: #2a9d8f;
+    --dim: #1a1a2e;
+    --muted: #6b7280;
+    --glow: rgba(230,57,70,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Cairo', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(230,57,70,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.15s ease, width 0.3s, height 0.3s;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1; opacity: 0.4;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 80px;
+    position: relative; z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(230,57,70,0.12);
+    border: 1px solid rgba(230,57,70,0.3);
+    border-radius: 2px;
+    padding: 6px 14px;
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 7vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -1px;
+    color: var(--paper);
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  .hero-title span { color: var(--accent); }
+
+  .hero-subtitle {
+    font-family: 'Cairo', sans-serif;
+    font-size: 18px;
+    color: rgba(245,240,232,0.6);
+    margin-top: 24px; line-height: 1.8;
+    max-width: 420px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 14px 28px;
+    border: none; border-radius: 2px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: none; text-decoration: none;
+    margin-top: 36px;
+    width: fit-content;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(230,57,70,0.4); }
+
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 80px 80px 40px;
+  }
+
+  /* Floating Stack Card */
+  .stack-visual {
+    position: relative;
+    width: 340px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-16px); }
+  }
+
+  .stack-card {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 16px;
+    transition: all 0.3s;
+    animation: slideIn 0.6s ease both;
+  }
+  .stack-card:hover {
+    background: rgba(245,240,232,0.08);
+    border-color: rgba(230,57,70,0.3);
+    transform: translateX(-6px);
+  }
+
+  .stack-icon {
+    width: 40px; height: 40px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+
+  .stack-info { flex: 1; }
+  .stack-name { font-weight: 700; font-size: 14px; color: var(--paper); }
+  .stack-type { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+  .stack-badge {
+    font-size: 10px; padding: 3px 8px; border-radius: 2px;
+    font-weight: 700; letter-spacing: 1px;
+  }
+  .badge-free { background: rgba(42,157,143,0.2); color: var(--teal); border: 1px solid rgba(42,157,143,0.3); }
+  .badge-paid { background: rgba(244,162,97,0.2); color: var(--gold); border: 1px solid rgba(244,162,97,0.3); }
+
+  /* Hero Background */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 600px 600px at 75% 50%, rgba(230,57,70,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 400px at 20% 80%, rgba(42,157,143,0.04) 0%, transparent 60%);
+  }
+
+  .hero-line {
+    position: absolute; top: 0; bottom: 0;
+    left: 50%; width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(245,240,232,0.06), transparent);
+  }
+
+  /* Grid lines */
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(245,240,232,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,232,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ─── SECTION COMMONS ─── */
+  section { position: relative; z-index: 2; }
+
+  .section-label {
+    font-size: 10px; letter-spacing: 4px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; max-width: 60px; height: 1px;
+    background: var(--accent); opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1; letter-spacing: 0.5px;
+    color: var(--paper);
+    margin-bottom: 48px;
+  }
+
+  /* ─── PLUGINS SECTION ─── */
+  .plugins-section {
+    padding: 100px 80px;
+    background: linear-gradient(180deg, var(--ink) 0%, #0d0d1a 100%);
+  }
+
+  .plugins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(245,240,232,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .plugin-card {
+    background: var(--ink);
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .plugin-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(230,57,70,0.06), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .plugin-card:hover::before { opacity: 1; }
+  .plugin-card:hover { background: #0f0f1e; }
+
+  .plugin-emoji { font-size: 28px; margin-bottom: 16px; display: block; }
+  .plugin-name {
+    font-weight: 700; font-size: 16px; margin-bottom: 6px;
+    color: var(--paper);
+  }
+  .plugin-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+  .plugin-meta { display: flex; align-items: center; justify-content: space-between; }
+  .plugin-cat { font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+
+  /* ─── PAYMENTS SECTION ─── */
+  .payments-section {
+    padding: 100px 80px;
+    background: #0d0d1a;
+  }
+
+  .payments-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .country-block {
+    background: rgba(245,240,232,0.02);
+    border: 1px solid rgba(245,240,232,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .country-header {
+    padding: 20px 28px;
+    background: rgba(245,240,232,0.03);
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 700; font-size: 16px;
+  }
+
+  .country-flag { font-size: 24px; }
+
+  .payment-item {
+    padding: 18px 28px;
+    border-bottom: 1px solid rgba(245,240,232,0.04);
+    display: flex; align-items: center; gap: 16px;
+    transition: background 0.2s;
+  }
+  .payment-item:hover { background: rgba(245,240,232,0.03); }
+  .payment-item:last-child { border-bottom: none; }
+
+  .payment-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dot-green { background: var(--teal); box-shadow: 0 0 8px rgba(42,157,143,0.5); }
+  .dot-gold { background: var(--gold); box-shadow: 0 0 8px rgba(244,162,97,0.5); }
+
+  .payment-info { flex: 1; }
+  .payment-name { font-weight: 600; font-size: 14px; }
+  .payment-note { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ─── STACK COST SECTION ─── */
+  .cost-section {
+    padding: 100px 80px;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+  }
+
+  .cost-section::before {
+    content: 'STACK';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 280px; line-height: 1;
+    color: rgba(245,240,232,0.015);
+    position: absolute; top: 50%; right: -20px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .cost-terminal {
+    background: #0a0a12;
+    border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    max-width: 680px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .terminal-header {
+    padding: 14px 20px;
+    background: rgba(245,240,232,0.03);
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .dot-r { width:10px;height:10px;border-radius:50%;background:#e63946; }
+  .dot-y { width:10px;height:10px;border-radius:50%;background:#f4a261; }
+  .dot-g { width:10px;height:10px;border-radius:50%;background:#2a9d8f; }
+
+  .terminal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--muted);
+    margin-right: auto;
+  }
+
+  .terminal-body { padding: 28px; }
+
+  .term-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; margin-bottom: 8px;
+    animation: typeIn 0.3s ease both;
+    line-height: 1.6;
+  }
+  .term-comment { color: rgba(245,240,232,0.25); }
+  .term-key { color: var(--gold); }
+  .term-value { color: var(--teal); }
+  .term-price { color: var(--accent); font-weight: 700; }
+  .term-free { color: var(--teal); }
+  .term-total {
+    border-top: 1px solid rgba(245,240,232,0.08);
+    margin-top: 16px; padding-top: 16px;
+    color: var(--paper); font-weight: 700; font-size: 15px;
+  }
+
+  /* ─── RTL SECTION ─── */
+  .rtl-section {
+    padding: 100px 80px;
+    background: linear-gradient(135deg, #0d0d1a 0%, var(--ink) 100%);
+  }
+
+  .rtl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .rtl-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.06);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .rtl-card:hover {
+    border-color: rgba(230,57,70,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .rtl-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; line-height: 1;
+    color: rgba(230,57,70,0.12);
+    position: absolute; top: 16px; left: 20px;
+  }
+
+  .rtl-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+  .rtl-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+  .rtl-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* ─── AUTOMATION SECTION ─── */
+  .auto-section {
+    padding: 100px 80px;
+    background: var(--dim);
+    position: relative; overflow: hidden;
+  }
+
+  .auto-section::after {
+    content: '';
+    position: absolute; bottom: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(42,157,143,0.08), transparent 70%);
+    pointer-events: none;
+  }
+
+  .auto-flow {
+    display: flex; align-items: center; gap: 0;
+    flex-wrap: wrap; row-gap: 24px;
+    margin-top: 48px;
+  }
+
+  .flow-node {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.3s;
+  }
+  .flow-node:hover {
+    border-color: var(--teal);
+    box-shadow: 0 0 20px rgba(42,157,143,0.2);
+  }
+
+  .flow-node-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+  .flow-node-name { font-size: 12px; font-weight: 700; color: var(--paper); }
+  .flow-node-sub { font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+
+  .flow-arrow {
+    font-size: 20px; color: rgba(245,240,232,0.2);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 60px 80px;
+    background: #050508;
+    border-top: 1px solid rgba(245,240,232,0.05);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 2px;
+  }
+  .footer-brand span { color: var(--accent); }
+
+  .footer-note {
+    font-size: 12px; color: var(--muted);
+    text-align: center; line-height: 1.7;
+  }
+
+  .footer-tech {
+    display: flex; gap: 12px; align-items: center;
+  }
+  .tech-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    padding: 5px 10px; border-radius: 2px;
+    color: var(--muted);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Separator */
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,240,232,0.06) 30%, rgba(245,240,232,0.06) 70%, transparent);
+    margin: 0 80px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 24px; }
+    .plugins-section, .payments-section, .rtl-section, .auto-section, .cost-section { padding: 60px 24px; }
+    .payments-grid { grid-template-columns: 1fr; }
+    .rtl-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 24px; padding: 40px 24px; text-align: center; }
+    .sep { margin: 0 24px; }
+    .auto-flow { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-line"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">
+      <span>⚡</span> دليل المحترف الشامل
+    </div>
+    <h1 class="hero-title">
+      WORDPRESS<br>
+      <span>E-COMMERCE</span><br>
+      MASTERY
+    </h1>
+    <p class="hero-subtitle">
+      أفضل الأدوات والبلاجنز المجانية والمدفوعة لبناء متجر إلكتروني احترافي بالعربية والإنجليزية — مُختارة بعين الـ CTO
+    </p>
+    <a href="#plugins" class="hero-cta">
+      استكشف الدليل ←
+    </a>
+  </div>
+
+  <div class="hero-right">
+    <div class="stack-visual">
+      <div class="stack-card" style="animation-delay:0.2s">
+        <div class="stack-icon" style="background:rgba(0,100,220,0.15)">🏗️</div>
+        <div class="stack-info">
+          <div class="stack-name">Flatsome Theme</div>
+          <div class="stack-type">THEME • UI KIT</div>
+        </div>
+        <span class="stack-badge badge-paid">$59</span>
+      </div>
+      <div class="stack-card" style="animation-delay:0.35s">
+        <div class="stack-icon" style="background:rgba(150,0,200,0.15)">⚡</div>
+        <div class="stack-info">
+          <div class="stack-name">Elementor Pro</div>
+          <div class="stack-type">PAGE BUILDER</div>
+        </div>
+        <span class="stack-badge badge-paid">$59/yr</span>
+      </div>
+      <div class="stack-card" style="animation-delay:0.5s">
+        <div class="stack-icon" style="background:rgba(0,180,120,0.15)">🌐</div>
+        <div class="stack-info">
+          <div class="stack-name">WPML</div>
+          <div class="stack-type">MULTILINGUAL</div>
+        </div>
+        <span class="stack-badge badge-paid">$99/yr</span>
+      </div>
+      <div class="stack-card" style="animation-delay:0.65s">
+        <div class="stack-icon" style="background:rgba(230,57,70,0.15)">🛒</div>
+        <div class="stack-info">
+          <div class="stack-name">WooCommerce</div>
+          <div class="stack-type">E-COMMERCE CORE</div>
+        </div>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+      <div class="stack-card" style="animation-delay:0.8s">
+        <div class="stack-icon" style="background:rgba(244,162,97,0.15)">🚀</div>
+        <div class="stack-info">
+          <div class="stack-name">WP Rocket</div>
+          <div class="stack-type">PERFORMANCE</div>
+        </div>
+        <span class="stack-badge badge-paid">$59/yr</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ═══════════ PLUGINS ═══════════ -->
+<section class="plugins-section reveal" id="plugins">
+  <div class="section-label">البلاجنز الأساسية</div>
+  <h2 class="section-title">ESSENTIAL PLUGINS</h2>
+
+  <div class="plugins-grid">
+    <!-- FREE -->
+    <div class="plugin-card">
+      <span class="plugin-emoji">🛒</span>
+      <div class="plugin-name">WooCommerce</div>
+      <div class="plugin-desc">العمود الفقري للمتجر — إضافة المنتجات، إدارة الطلبات، والسلة بالكامل</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">E-Commerce Core</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">🌍</span>
+      <div class="plugin-name">Polylang</div>
+      <div class="plugin-desc">دعم اللغات المتعددة — بديل مجاني ممتاز لـ WPML للمشاريع الصغيرة</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Multilingual</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">📈</span>
+      <div class="plugin-name">Yoast SEO</div>
+      <div class="plugin-desc">تحسين محركات البحث — سيو متكامل مع دعم Schema وOpen Graph</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">SEO</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">🔒</span>
+      <div class="plugin-name">Wordfence Security</div>
+      <div class="plugin-desc">جدار حماية + مسح Malware + حماية Login — ضروري لأي متجر</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Security</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">📦</span>
+      <div class="plugin-name">Dokan Multivendor</div>
+      <div class="plugin-desc">حوّل متجرك لـ Marketplace — كل بائع له لوحة تحكم مستقلة</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Marketplace</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">📧</span>
+      <div class="plugin-name">MailPoet</div>
+      <div class="plugin-desc">Email Marketing مدمج — حملات، أتمتة، وإشعارات الطلبات</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Marketing</span>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+    </div>
+
+    <!-- PAID -->
+    <div class="plugin-card">
+      <span class="plugin-emoji">🌐</span>
+      <div class="plugin-name">WPML</div>
+      <div class="plugin-desc">الحل الأقوى للترجمة — عربي/إنجليزي بشكل مثالي مع RTL كامل</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Multilingual</span>
+        <span class="stack-badge badge-paid">$99/yr</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">⚡</span>
+      <div class="plugin-name">WP Rocket</div>
+      <div class="plugin-desc">أسرع Cache Plugin — Lazy Load، Preload، وتحسين Core Web Vitals</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Performance</span>
+        <span class="stack-badge badge-paid">$59/yr</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">🎨</span>
+      <div class="plugin-name">Elementor Pro</div>
+      <div class="plugin-desc">تحكم كامل في كل عنصر — Widgets متقدمة، Popup Builder، وTheme Builder</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Page Builder</span>
+        <span class="stack-badge badge-paid">$59/yr</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">🖼️</span>
+      <div class="plugin-name">ShortPixel</div>
+      <div class="plugin-desc">ضغط الصور تلقائياً — WebP + CDN = سرعة استثنائية للمتجر</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Optimization</span>
+        <span class="stack-badge badge-paid">$4.99/mo</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">📊</span>
+      <div class="plugin-name">WooCommerce Analytics Pro</div>
+      <div class="plugin-desc">تقارير متقدمة — مبيعات، تحليل العملاء، وأداء المنتجات</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Analytics</span>
+        <span class="stack-badge badge-paid">$99/yr</span>
+      </div>
+    </div>
+
+    <div class="plugin-card">
+      <span class="plugin-emoji">🔄</span>
+      <div class="plugin-name">UpdraftPlus Premium</div>
+      <div class="plugin-desc">نسخ احتياطي تلقائي — Google Drive، Dropbox، وS3 بجدولة كاملة</div>
+      <div class="plugin-meta">
+        <span class="plugin-cat">Backup</span>
+        <span class="stack-badge badge-paid">$70/yr</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ═══════════ PAYMENTS ═══════════ -->
+<section class="payments-section reveal">
+  <div class="section-label">بوابات الدفع</div>
+  <h2 class="section-title">PAYMENT GATEWAYS</h2>
+
+  <div class="payments-grid">
+    <div class="country-block">
+      <div class="country-header">
+        <span class="country-flag">🇪🇬</span>
+        السوق المصري
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-green"></span>
+        <div class="payment-info">
+          <div class="payment-name">Paymob (Accept)</div>
+          <div class="payment-note">بطاقات + محافظ + فاتورة — Plugin جاهز لـ WooCommerce</div>
+        </div>
+        <span class="stack-badge badge-free">FREE SETUP</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-green"></span>
+        <div class="payment-info">
+          <div class="payment-name">Fawry</div>
+          <div class="payment-note">الأكثر انتشاراً — دفع في المحلات + أونلاين</div>
+        </div>
+        <span class="stack-badge badge-free">FREE</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-gold"></span>
+        <div class="payment-info">
+          <div class="payment-name">Kashier</div>
+          <div class="payment-note">واجهة عربية ممتازة + دعم 3DS</div>
+        </div>
+        <span class="stack-badge badge-paid">COMMISSION</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-gold"></span>
+        <div class="payment-info">
+          <div class="payment-name">Stripe (عبر وسيط)</div>
+          <div class="payment-note">عبر وسيط مصري — بطاقات دولية</div>
+        </div>
+        <span class="stack-badge badge-paid">2.9% + 30¢</span>
+      </div>
+    </div>
+
+    <div class="country-block">
+      <div class="country-header">
+        <span class="country-flag">🇸🇦</span>
+        السوق الخليجي
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-green"></span>
+        <div class="payment-info">
+          <div class="payment-name">Moyasar</div>
+          <div class="payment-note">الأفضل في السعودية — Plugin رسمي لـ WooCommerce</div>
+        </div>
+        <span class="stack-badge badge-free">FREE SETUP</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-green"></span>
+        <div class="payment-info">
+          <div class="payment-name">Tap Payments</div>
+          <div class="payment-note">يغطي كل الخليج — STC Pay + Mada + Visa</div>
+        </div>
+        <span class="stack-badge badge-free">FREE SETUP</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-gold"></span>
+        <div class="payment-info">
+          <div class="payment-name">HyperPay</div>
+          <div class="payment-note">Enterprise level — مثالي للمشاريع الكبيرة</div>
+        </div>
+        <span class="stack-badge badge-paid">ENTERPRISE</span>
+      </div>
+      <div class="payment-item">
+        <span class="payment-dot dot-gold"></span>
+        <div class="payment-info">
+          <div class="payment-name">PayTabs</div>
+          <div class="payment-note">مصر + الخليج في بوابة واحدة</div>
+        </div>
+        <span class="stack-badge badge-paid">COMMISSION</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ═══════════ RTL ═══════════ -->
+<section class="rtl-section reveal">
+  <div class="section-label">دعم العربية</div>
+  <h2 class="section-title">RTL & ARABIC</h2>
+
+  <div class="rtl-grid">
+    <div class="rtl-card">
+      <span class="rtl-number">01</span>
+      <span class="rtl-icon">🔤</span>
+      <div class="rtl-title">خطوط عربية احترافية</div>
+      <div class="rtl-text">استخدم Cairo أو Tajawal من Google Fonts — تدعم RTL بالكامل وتبدو احترافية على جميع الشاشات</div>
+    </div>
+    <div class="rtl-card">
+      <span class="rtl-number">02</span>
+      <span class="rtl-icon">↔️</span>
+      <div class="rtl-title">RTL Plugin</div>
+      <div class="rtl-text">تفعيل RTL Tester للتأكد من أن كل عنصر في المتجر يعمل صح في الاتجاهين</div>
+    </div>
+    <div class="rtl-card">
+      <span class="rtl-number">03</span>
+      <span class="rtl-icon">🌐</span>
+      <div class="rtl-title">WPML أو TranslatePress</div>
+      <div class="rtl-text">ترجمة ديناميكية لكل شيء — المنتجات، التصنيفات، الإيميلات، وصفحات الـ Checkout</div>
+    </div>
+    <div class="rtl-card">
+      <span class="rtl-number">04</span>
+      <span class="rtl-icon">💱</span>
+      <div class="rtl-title">Multi-Currency</div>
+      <div class="rtl-text">Currency Switcher Pro — عرض الأسعار بالجنيه أو الريال أو الدرهم تلقائياً حسب موقع الزائر</div>
+    </div>
+    <div class="rtl-card">
+      <span class="rtl-number">05</span>
+      <span class="rtl-icon">📱</span>
+      <div class="rtl-title">Responsive RTL Testing</div>
+      <div class="rtl-text">اختبر على موبايل عربي + إنجليزي — خصوصاً صفحة الـ Cart والـ Checkout</div>
+    </div>
+    <div class="rtl-card">
+      <span class="rtl-number">06</span>
+      <span class="rtl-icon">📧</span>
+      <div class="rtl-title">Arabic Email Templates</div>
+      <div class="rtl-text">Email Customizer for WooCommerce — قوالب إيميل عربية/إنجليزية لكل حالات الطلب</div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ═══════════ COST TERMINAL ═══════════ -->
+<section class="cost-section reveal">
+  <div class="section-label">التكلفة المثلى</div>
+  <h2 class="section-title">OPTIMAL STACK COST</h2>
+
+  <div style="display:flex; gap:48px; align-items:flex-start; flex-wrap:wrap;">
+    <div class="cost-terminal">
+      <div class="terminal-header">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <span class="terminal-title">~ optimal-stack.config</span>
+      </div>
+      <div class="terminal-body">
+        <div class="term-line term-comment"># Hosting Infrastructure</div>
+        <div class="term-line"><span class="term-key">hosting</span>: <span class="term-value">Cloudways (DigitalOcean)</span> <span class="term-price">$14/mo</span></div>
+        <div class="term-line"><span class="term-key">cdn</span>: <span class="term-value">Cloudflare</span> <span class="term-free">FREE</span></div>
+        <br>
+        <div class="term-line term-comment"># Theme & Builder (one-time)</div>
+        <div class="term-line"><span class="term-key">theme</span>: <span class="term-value">Flatsome</span> <span class="term-price">$59 once</span></div>
+        <div class="term-line"><span class="term-key">builder</span>: <span class="term-value">Elementor Pro</span> <span class="term-price">$59/yr</span></div>
+        <br>
+        <div class="term-line term-comment"># Core Plugins (annual)</div>
+        <div class="term-line"><span class="term-key">ecommerce</span>: <span class="term-value">WooCommerce</span> <span class="term-free">FREE</span></div>
+        <div class="term-line"><span class="term-key">multilang</span>: <span class="term-value">WPML</span> <span class="term-price">$99/yr</span></div>
+        <div class="term-line"><span class="term-key">cache</span>: <span class="term-value">WP Rocket</span> <span class="term-price">$59/yr</span></div>
+        <div class="term-line"><span class="term-key">security</span>: <span class="term-value">Wordfence</span> <span class="term-free">FREE</span></div>
+        <div class="term-line"><span class="term-key">seo</span>: <span class="term-value">Yoast SEO</span> <span class="term-free">FREE</span></div>
+        <div class="term-line"><span class="term-key">images</span>: <span class="term-value">ShortPixel</span> <span class="term-price">$4.99/mo</span></div>
+        <br>
+        <div class="term-line term-comment"># Payment (no setup cost)</div>
+        <div class="term-line"><span class="term-key">egypt</span>: <span class="term-value">Paymob + Fawry</span> <span class="term-free">FREE SETUP</span></div>
+        <div class="term-line"><span class="term-key">gulf</span>: <span class="term-value">Moyasar + Tap</span> <span class="term-free">FREE SETUP</span></div>
+        <br>
+        <div class="term-line term-total">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        <div class="term-line term-total">💰 Year 1 Total: ~$470 + hosting</div>
+        <div class="term-line term-total">📅 Year 2+: ~$285/yr</div>
+      </div>
+    </div>
+
+    <div style="flex:1; min-width:240px;">
+      <div style="margin-bottom:24px;">
+        <div class="section-label" style="margin-bottom:12px;">CTO Tip</div>
+        <p style="font-size:14px; color:rgba(245,240,232,0.6); line-height:1.9; margin-bottom:16px;">
+          بما إنك ERPNext Developer، ده ميزة تنافسية ضخمة — ربط WooCommerce بـ ERPNext هيخليك تتحكم في المخزون، المحاسبة، والطلبات من مكان واحد.
+        </p>
+        <p style="font-size:14px; color:rgba(245,240,232,0.6); line-height:1.9;">
+          استخدم WooCommerce REST API + n8n أو Make لأتمتة كل العمليات بين المتجر والـ ERP.
+        </p>
+      </div>
+
+      <div style="background:rgba(42,157,143,0.08); border:1px solid rgba(42,157,143,0.2); border-radius:4px; padding:20px;">
+        <div style="font-size:11px; letter-spacing:2px; color:var(--teal); margin-bottom:12px;">YOUR EDGE</div>
+        <div style="font-size:13px; color:rgba(245,240,232,0.8); line-height:1.8;">
+          ✅ Full Stack → Custom Development<br>
+          ✅ ERPNext → Business Automation<br>
+          ✅ Automation → Zero Manual Work<br>
+          ✅ CTO Mindset → Scalable Architecture
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ═══════════ AUTOMATION ═══════════ -->
+<section class="auto-section reveal">
+  <div class="section-label">أتمتة العمليات</div>
+  <h2 class="section-title">AUTOMATION FLOW</h2>
+
+  <div class="auto-flow">
+    <div class="flow-node">
+      <span class="flow-node-icon">🛒</span>
+      <div class="flow-node-name">WooCommerce</div>
+      <div class="flow-node-sub">ORDER PLACED</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <span class="flow-node-icon">⚙️</span>
+      <div class="flow-node-name">n8n / Make</div>
+      <div class="flow-node-sub">AUTOMATION</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <span class="flow-node-icon">📊</span>
+      <div class="flow-node-name">ERPNext</div>
+      <div class="flow-node-sub">SYNC DATA</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <span class="flow-node-icon">📦</span>
+      <div class="flow-node-name">Inventory</div>
+      <div class="flow-node-sub">AUTO UPDATE</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <span class="flow-node-icon">📧</span>
+      <div class="flow-node-name">Email / SMS</div>
+      <div class="flow-node-sub">NOTIFY</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <span class="flow-node-icon">💰</span>
+      <div class="flow-node-name">Accounting</div>
+      <div class="flow-node-sub">AUTO ENTRY</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-brand">WP<span>STACK</span></div>
+  <div class="footer-note">
+    دليل شامل صُمم بعقلية الـ CTO<br>
+    للمشاريع العربية والخليجية المحترفة
+  </div>
+  <div class="footer-tech">
+    <span class="tech-pill">WordPress</span>
+    <span class="tech-pill">WooCommerce</span>
+    <span class="tech-pill">ERPNext</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Stagger plugin cards
+  document.querySelectorAll('.plugin-card').forEach((card, i) => {
+    card.style.animationDelay = `${i * 0.07}s`;
+    card.classList.add('reveal');
+    obs.observe(card);
+  });
+
+  // Terminal typing effect
+  const termLines = document.querySelectorAll('.term-line');
+  termLines.forEach((line, i) => {
+    line.style.opacity = '0';
+    line.style.animationDelay = `${i * 0.06}s`;
+    setTimeout(() => {
+      line.style.transition = 'opacity 0.4s';
+      line.style.opacity = '1';
+    }, i * 60 + 600);
+  });
+</script>
+</body>
+</html>
